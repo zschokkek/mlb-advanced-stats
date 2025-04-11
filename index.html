@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Top MLB WAR Stretches</title>
+  <style>
+    /* CSS that keeps tables side-by-side always */
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  color: #333;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 28px;
+  margin-bottom: 5px;
+  color: #111;
+  text-align: center;
+}
+
+.main-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* This container will always keep tables side by side */
+.tables-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px; /* Smaller gap helps on smaller screens */
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0; /* Important for flex items to shrink below content size */
+}
+
+/* Each table section will shrink as needed */
+.table-section {
+  width: 50%;
+  background-color: white;
+  border-radius: 4px;
+  padding: 15px; /* Slightly smaller padding */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Add this line for a subtle shadow */
+  box-sizing: border-box;
+  min-width: 0; /* Important for flex shrinking */
+}
+
+.table-title {
+  font-weight: bold;
+  font-size: 22px; /* Slightly smaller */
+  margin-bottom: 5px;
+  color: #111;
+  text-align: center;
+}
+
+.table-subtitle {
+  font-size: 14px; /* Smaller for tight spaces */
+  color: #666;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 15px;
+  border-bottom: 3px solid #f0f0f0;
+}
+
+.tab {
+  padding: 10px 15px; /* Smaller padding */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px; /* Smaller font */
+  color: #666;
+  position: relative;
+}
+
+.tab.active {
+  color: #ff6310;
+}
+
+.tab.active:after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #ff6310;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed !important; /* This is crucial */
+}
+
+/* Set explicit widths for other columns so they don't push the rank column wider */
+th:nth-child(2), td:nth-child(2) { width: 40%; } /* Player column */
+th:nth-child(3), td:nth-child(3) { width: 25%; } /* Years column */
+th:nth-child(4), td:nth-child(4) { width: calc(35% - 25px); } /* WAR column */
+    /* Right-align the fourth column header (WAR column) */
+th:nth-child(4) {
+  text-align: right !important;
+}
+    
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white; /* Match your background color */
+  border-bottom: 2px solid #ddd;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background-color: white; /* Match your background color */
+  text-align: left;
+  padding: 8px 6px;
+  font-weight: bold;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+td {
+  padding: 8px 6px; /* Smaller padding */
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+th:first-child,
+td:first-child,
+.rank-cell {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  text-align: center !important;
+}
+
+/* Adjust the WAR column width to account for the change */
+th:nth-child(4), td:nth-child(4) { 
+  width: calc(35% - 30px); /* Adjust this value to match the rank column width */
+}
+
+.player-cell {
+  font-weight: bold;
+}
+
+.years-cell {
+  color: #666;
+}
+
+.war-cell {
+  font-weight: bold;
+  text-align: right;
+  color: #ff6310;
+}
+
+.total-war-cell {
+  text-align: right;
+}
+
+.footer-note {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+.highlight-row {
+  background-color: #fff8f0;
+}
+
+/* This ensures text truncates with ellipsis when space is tight */
+th, td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+  </style>
+</head>
+<body>
+  <h2>Top MLB WAR Stretches (2000-2024)</h2>
+  <div class="main-subtitle">Best single-season and multi-year performances by WAR</div>
+  
+  <div class="tables-container">
+    <!-- Batting WAR Table -->
+    <div class="table-section">
+      <div class="table-title">Batting WAR</div>
+      <div class="table-subtitle">Best hitter performances</div>
+      
+      <div class="tabs batting-tabs">
+        <div class="tab active" data-years="1" data-type="batting">1-Year Peak</div>
+        <div class="tab" data-years="3" data-type="batting">3-Year Peak</div>
+        <div class="tab" data-years="5" data-type="batting">5-Year Peak</div>
+      </div>
+      
+      <div class="table-container">
+        <table id="batting-war-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Years</th>
+              <th>wRC+</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be populated with JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="footer-note">
+        Data represents the best batting WAR stretches for MLB players since 2000.
+      </div>
+    </div>
+    
+    <!-- Pitching WAR Table -->
+    <div class="table-section">
+      <div class="table-title">Pitching WAR</div>
+      <div class="table-subtitle">Best pitcher performances</div>
+      
+      <div class="tabs pitching-tabs">
+        <div class="tab active" data-years="1" data-type="pitching">1-Year Peak</div>
+        <div class="tab" data-years="3" data-type="pitching">3-Year Peak</div>
+        <div class="tab" data-years="5" data-type="pitching">5-Year Peak</div>
+      </div>
+      
+      <div class="table-container">
+        <table id="pitching-war-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Years</th>
+              <th>FIP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be populated with JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="footer-note">
+        Data represents the best pitching WAR stretches for MLB pitchers since 2000.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mock data structure - replace with your actual data
+    // wRC+ Data formatted for JavaScript use
+const battingData = {
+  '1': [
+    { rank: 1, player: 'Barry Bonds', startYear: 2002, endYear: 2002, avgWRCPlus: 244.0, totalWRCPlus: 244.0 },
+    { rank: 2, player: 'Aaron Judge', startYear: 2024, endYear: 2024, avgWRCPlus: 218.0, totalWRCPlus: 218.0 },
+    { rank: 3, player: 'Bryce Harper', startYear: 2015, endYear: 2015, avgWRCPlus: 197.0, totalWRCPlus: 197.0 },
+    { rank: 4, player: 'Mark McGwire', startYear: 2000, endYear: 2000, avgWRCPlus: 195.0, totalWRCPlus: 195.0 },
+    { rank: 5, player: 'Miguel Cabrera', startYear: 2013, endYear: 2013, avgWRCPlus: 193.0, totalWRCPlus: 193.0 },
+    { rank: 6, player: 'Jason Giambi', startYear: 2001, endYear: 2001, avgWRCPlus: 193.0, totalWRCPlus: 193.0 },
+    { rank: 7, player: 'Hanley Ramirez', startYear: 2013, endYear: 2013, avgWRCPlus: 191.0, totalWRCPlus: 191.0 },
+    { rank: 8, player: 'Jim Thome', startYear: 2002, endYear: 2002, avgWRCPlus: 189.0, totalWRCPlus: 189.0 },
+    { rank: 9, player: 'Mike Trout', startYear: 2018, endYear: 2018, avgWRCPlus: 188.0, totalWRCPlus: 188.0 },
+    { rank: 10, player: 'Sammy Sosa', startYear: 2001, endYear: 2001, avgWRCPlus: 186.0, totalWRCPlus: 186.0 },
+    { rank: 11, player: 'Mookie Betts', startYear: 2018, endYear: 2018, avgWRCPlus: 185.0, totalWRCPlus: 185.0 },
+    { rank: 12, player: 'Manny Ramirez', startYear: 2002, endYear: 2002, avgWRCPlus: 185.0, totalWRCPlus: 185.0 },
+    { rank: 13, player: 'Yordan Alvarez', startYear: 2022, endYear: 2022, avgWRCPlus: 185.0, totalWRCPlus: 185.0 },
+    { rank: 14, player: 'Albert Pujols', startYear: 2003, endYear: 2003, avgWRCPlus: 184.0, totalWRCPlus: 184.0 },
+    { rank: 15, player: 'Justin Morneau', startYear: 2010, endYear: 2010, avgWRCPlus: 183.0, totalWRCPlus: 183.0 },
+    { rank: 16, player: 'Shohei Ohtani', startYear: 2024, endYear: 2024, avgWRCPlus: 181.0, totalWRCPlus: 181.0 },
+    { rank: 17, player: 'Juan Soto', startYear: 2024, endYear: 2024, avgWRCPlus: 180.0, totalWRCPlus: 180.0 },
+    { rank: 18, player: 'Kyle Tucker', startYear: 2024, endYear: 2024, avgWRCPlus: 180.0, totalWRCPlus: 180.0 },
+    { rank: 19, player: 'Jose Bautista', startYear: 2011, endYear: 2011, avgWRCPlus: 180.0, totalWRCPlus: 180.0 },
+    { rank: 20, player: 'Carlos Delgado', startYear: 2000, endYear: 2000, avgWRCPlus: 179.0, totalWRCPlus: 179.0 },
+    { rank: 21, player: 'Mike Napoli', startYear: 2011, endYear: 2011, avgWRCPlus: 179.0, totalWRCPlus: 179.0 },
+    { rank: 22, player: 'Joey Votto', startYear: 2012, endYear: 2012, avgWRCPlus: 178.0, totalWRCPlus: 178.0 },
+    { rank: 23, player: 'Travis Hafner', startYear: 2006, endYear: 2006, avgWRCPlus: 176.0, totalWRCPlus: 176.0 },
+    { rank: 24, player: 'David Ortiz', startYear: 2007, endYear: 2007, avgWRCPlus: 175.0, totalWRCPlus: 175.0 },
+    { rank: 25, player: 'Josh Hamilton', startYear: 2010, endYear: 2010, avgWRCPlus: 175.0, totalWRCPlus: 175.0 }
+  ],
+  '3': [
+    { rank: 1, player: 'Barry Bonds', startYear: 2001, endYear: 2003, avgWRCPlus: 230.33, totalWRCPlus: 691.0 },
+    { rank: 2, player: 'Aaron Judge', startYear: 2022, endYear: 2024, avgWRCPlus: 198.67, totalWRCPlus: 596.0 },
+    { rank: 3, player: 'Jason Giambi', startYear: 2000, endYear: 2002, avgWRCPlus: 183.67, totalWRCPlus: 551.0 },
+    { rank: 4, player: 'Mike Trout', startYear: 2017, endYear: 2019, avgWRCPlus: 181.67, totalWRCPlus: 545.0 },
+    { rank: 5, player: 'Miguel Cabrera', startYear: 2011, endYear: 2013, avgWRCPlus: 178.67, totalWRCPlus: 536.0 },
+    { rank: 6, player: 'Albert Pujols', startYear: 2008, endYear: 2010, avgWRCPlus: 176.0, totalWRCPlus: 528.0 },
+    { rank: 7, player: 'Yordan Alvarez', startYear: 2022, endYear: 2024, avgWRCPlus: 174.33, totalWRCPlus: 523.0 },
+    { rank: 8, player: 'Manny Ramirez', startYear: 2000, endYear: 2002, avgWRCPlus: 174.33, totalWRCPlus: 523.0 },
+    { rank: 9, player: 'Joey Votto', startYear: 2010, endYear: 2012, avgWRCPlus: 169.0, totalWRCPlus: 507.0 },
+    { rank: 10, player: 'Shohei Ohtani', startYear: 2022, endYear: 2024, avgWRCPlus: 167.33, totalWRCPlus: 502.0 },
+    { rank: 11, player: 'Jim Thome', startYear: 2001, endYear: 2003, avgWRCPlus: 167.0, totalWRCPlus: 501.0 },
+    { rank: 12, player: 'Travis Hafner', startYear: 2004, endYear: 2006, avgWRCPlus: 166.67, totalWRCPlus: 500.0 },
+    { rank: 13, player: 'Sammy Sosa', startYear: 2000, endYear: 2002, avgWRCPlus: 165.67, totalWRCPlus: 497.0 },
+    { rank: 14, player: 'Chipper Jones', startYear: 2006, endYear: 2008, avgWRCPlus: 164.0, totalWRCPlus: 492.0 },
+    { rank: 15, player: 'David Ortiz', startYear: 2005, endYear: 2007, avgWRCPlus: 163.0, totalWRCPlus: 489.0 },
+    { rank: 16, player: 'Alex Rodriguez', startYear: 2005, endYear: 2007, avgWRCPlus: 161.67, totalWRCPlus: 485.0 },
+    { rank: 17, player: 'Andrew McCutchen', startYear: 2012, endYear: 2014, avgWRCPlus: 161.0, totalWRCPlus: 483.0 },
+    { rank: 18, player: 'Jose Bautista', startYear: 2010, endYear: 2012, avgWRCPlus: 160.67, totalWRCPlus: 482.0 },
+    { rank: 19, player: 'Jim Edmonds', startYear: 2002, endYear: 2004, avgWRCPlus: 160.33, totalWRCPlus: 481.0 },
+    { rank: 20, player: 'J.D. Martinez', startYear: 2016, endYear: 2018, avgWRCPlus: 160.0, totalWRCPlus: 480.0 },
+    { rank: 21, player: 'Juan Soto', startYear: 2022, endYear: 2024, avgWRCPlus: 160.0, totalWRCPlus: 480.0 },
+    { rank: 22, player: 'Brian Giles', startYear: 2000, endYear: 2002, avgWRCPlus: 159.0, totalWRCPlus: 477.0 },
+    { rank: 23, player: 'Gary Sheffield', startYear: 2000, endYear: 2002, avgWRCPlus: 158.67, totalWRCPlus: 476.0 },
+    { rank: 24, player: 'Todd Helton', startYear: 2003, endYear: 2005, avgWRCPlus: 158.0, totalWRCPlus: 474.0 },
+    { rank: 25, player: 'Paul Goldschmidt', startYear: 2013, endYear: 2015, avgWRCPlus: 157.67, totalWRCPlus: 473.0 }
+  ],
+  '5': [
+    { rank: 1, player: 'Barry Bonds', startYear: 2000, endYear: 2004, avgWRCPlus: 219.6, totalWRCPlus: 1098.0 },
+    { rank: 2, player: 'Mike Trout', startYear: 2016, endYear: 2022, avgWRCPlus: 178.2, totalWRCPlus: 891.0 },
+    { rank: 3, player: 'Aaron Judge', startYear: 2019, endYear: 2024, avgWRCPlus: 177.4, totalWRCPlus: 887.0 },
+    { rank: 4, player: 'Albert Pujols', startYear: 2005, endYear: 2009, avgWRCPlus: 172.0, totalWRCPlus: 860.0 },
+    { rank: 5, player: 'Miguel Cabrera', startYear: 2010, endYear: 2014, avgWRCPlus: 171.0, totalWRCPlus: 855.0 },
+    { rank: 6, player: 'Yordan Alvarez', startYear: 2019, endYear: 2024, avgWRCPlus: 167.4, totalWRCPlus: 837.0 },
+    { rank: 7, player: 'Joey Votto', startYear: 2010, endYear: 2015, avgWRCPlus: 167.2, totalWRCPlus: 836.0 },
+    { rank: 8, player: 'Manny Ramirez', startYear: 2000, endYear: 2004, avgWRCPlus: 166.8, totalWRCPlus: 834.0 },
+    { rank: 9, player: 'Jim Thome', startYear: 2001, endYear: 2006, avgWRCPlus: 158.8, totalWRCPlus: 794.0 },
+    { rank: 10, player: 'Jason Giambi', startYear: 2000, endYear: 2004, avgWRCPlus: 158.8, totalWRCPlus: 794.0 },
+    { rank: 11, player: 'Todd Helton', startYear: 2000, endYear: 2004, avgWRCPlus: 158.4, totalWRCPlus: 792.0 },
+    { rank: 12, player: 'Juan Soto', startYear: 2019, endYear: 2024, avgWRCPlus: 157.4, totalWRCPlus: 787.0 },
+    { rank: 13, player: 'David Ortiz', startYear: 2003, endYear: 2007, avgWRCPlus: 156.2, totalWRCPlus: 781.0 },
+    { rank: 14, player: 'Gary Sheffield', startYear: 2000, endYear: 2004, avgWRCPlus: 156.0, totalWRCPlus: 780.0 },
+    { rank: 15, player: 'Jim Edmonds', startYear: 2000, endYear: 2004, avgWRCPlus: 155.6, totalWRCPlus: 778.0 },
+    { rank: 16, player: 'Alex Rodriguez', startYear: 2005, endYear: 2009, avgWRCPlus: 155.6, totalWRCPlus: 778.0 },
+    { rank: 17, player: 'Jose Bautista', startYear: 2010, endYear: 2014, avgWRCPlus: 155.4, totalWRCPlus: 777.0 },
+    { rank: 18, player: 'Shohei Ohtani', startYear: 2019, endYear: 2024, avgWRCPlus: 154.4, totalWRCPlus: 772.0 },
+    { rank: 19, player: 'J.D. Martinez', startYear: 2014, endYear: 2018, avgWRCPlus: 154.0, totalWRCPlus: 770.0 },
+    { rank: 20, player: 'Chipper Jones', startYear: 2004, endYear: 2008, avgWRCPlus: 152.4, totalWRCPlus: 762.0 },
+    { rank: 21, player: 'Mookie Betts', startYear: 2018, endYear: 2023, avgWRCPlus: 152.2, totalWRCPlus: 761.0 },
+    { rank: 22, player: 'Lance Berkman', startYear: 2001, endYear: 2005, avgWRCPlus: 151.4, totalWRCPlus: 757.0 },
+    { rank: 23, player: 'Andrew McCutchen', startYear: 2011, endYear: 2015, avgWRCPlus: 151.4, totalWRCPlus: 757.0 },
+    { rank: 24, player: 'Giancarlo Stanton', startYear: 2011, endYear: 2015, avgWRCPlus: 150.4, totalWRCPlus: 752.0 },
+    { rank: 25, player: 'Carlos Delgado', startYear: 2000, endYear: 2004, avgWRCPlus: 150.4, totalWRCPlus: 752.0 }
+  ]
+};
+   // FIP Data formatted for JavaScript use
+const pitchingData = {
+  '1': [
+    { rank: 1, player: 'Corbin Burnes', startYear: 2021, endYear: 2021, avgFIP: 1.63, ip: 167.0 },
+    { rank: 2, player: 'Clayton Kershaw', startYear: 2014, endYear: 2014, avgFIP: 1.81, ip: 198.1 },
+    { rank: 3, player: 'Jacob deGrom', startYear: 2018, endYear: 2018, avgFIP: 1.99, ip: 217.0 },
+    { rank: 4, player: 'Matt Harvey', startYear: 2013, endYear: 2013, avgFIP: 2.00, ip: 178.1 },
+    { rank: 5, player: 'Chris Sale', startYear: 2024, endYear: 2024, avgFIP: 2.09, ip: 177.2 },
+    { rank: 6, player: 'Randy Johnson', startYear: 2001, endYear: 2001, avgFIP: 2.13, ip: 249.2 },
+    { rank: 7, player: 'Pedro Martinez', startYear: 2000, endYear: 2000, avgFIP: 2.17, ip: 217.0 },
+    { rank: 8, player: 'Roy Halladay', startYear: 2011, endYear: 2011, avgFIP: 2.20, ip: 233.2 },
+    { rank: 9, player: 'Carlos Rodon', startYear: 2022, endYear: 2022, avgFIP: 2.25, ip: 178.0 },
+    { rank: 10, player: 'Noah Syndergaard', startYear: 2016, endYear: 2016, avgFIP: 2.29, ip: 183.2 },
+    { rank: 11, player: 'Jose Fernandez', startYear: 2016, endYear: 2016, avgFIP: 2.30, ip: 182.1 },
+    { rank: 12, player: 'Zack Greinke', startYear: 2009, endYear: 2009, avgFIP: 2.33, ip: 229.1 },
+    { rank: 13, player: 'Tim Lincecum', startYear: 2009, endYear: 2009, avgFIP: 2.34, ip: 225.1 },
+    { rank: 14, player: 'Corey Kluber', startYear: 2014, endYear: 2014, avgFIP: 2.35, ip: 235.2 },
+    { rank: 15, player: 'Jake Arrieta', startYear: 2015, endYear: 2015, avgFIP: 2.35, ip: 229.0 },
+    { rank: 16, player: 'Kevin Gausman', startYear: 2022, endYear: 2022, avgFIP: 2.38, ip: 174.2 },
+    { rank: 17, player: 'Anibal Sanchez', startYear: 2013, endYear: 2013, avgFIP: 2.39, ip: 182.0 },
+    { rank: 18, player: 'Curt Schilling', startYear: 2002, endYear: 2002, avgFIP: 2.40, ip: 259.1 },
+    { rank: 19, player: 'Shohei Ohtani', startYear: 2022, endYear: 2022, avgFIP: 2.40, ip: 166.0 },
+    { rank: 20, player: 'Josh Johnson', startYear: 2010, endYear: 2010, avgFIP: 2.41, ip: 183.2 },
+    { rank: 21, player: 'Trevor Bauer', startYear: 2018, endYear: 2018, avgFIP: 2.44, ip: 175.1 },
+    { rank: 22, player: 'Max Scherzer', startYear: 2019, endYear: 2019, avgFIP: 2.45, ip: 172.1 },
+    { rank: 23, player: 'Mark Prior', startYear: 2003, endYear: 2003, avgFIP: 2.47, ip: 211.1 },
+    { rank: 24, player: 'Patrick Corbin', startYear: 2018, endYear: 2018, avgFIP: 2.47, ip: 200.0 },
+    { rank: 25, player: 'Tarik Skubal', startYear: 2024, endYear: 2024, avgFIP: 2.49, ip: 192.0 }
+  ],
+  '3': [
+    { rank: 1, player: 'Clayton Kershaw', startYear: 2014, endYear: 2016, avgFIP: 1.87, ip: 579.3 },
+    { rank: 2, player: 'Pedro Martinez', startYear: 2000, endYear: 2002, avgFIP: 2.01, ip: 532.3 },
+    { rank: 3, player: 'Jacob deGrom', startYear: 2018, endYear: 2020, avgFIP: 2.31, ip: 489.0 },
+    { rank: 4, player: 'Randy Johnson', startYear: 2000, endYear: 2002, avgFIP: 2.44, ip: 757.4 },
+    { rank: 5, player: 'Chris Sale', startYear: 2017, endYear: 2019, avgFIP: 2.61, ip: 519.2 },
+    { rank: 6, player: 'Max Scherzer', startYear: 2017, endYear: 2019, avgFIP: 2.67, ip: 592.5 },
+    { rank: 7, player: 'Felix Hernandez', startYear: 2012, endYear: 2014, avgFIP: 2.67, ip: 672.1 },
+    { rank: 8, player: 'Tim Lincecum', startYear: 2008, endYear: 2010, avgFIP: 2.70, ip: 664.2 },
+    { rank: 9, player: 'Josh Johnson', startYear: 2009, endYear: 2011, avgFIP: 2.70, ip: 452.3 },
+    { rank: 10, player: 'Jake Arrieta', startYear: 2014, endYear: 2016, avgFIP: 2.71, ip: 582.3 },
+    { rank: 11, player: 'Curt Schilling', startYear: 2001, endYear: 2003, avgFIP: 2.72, ip: 683.3 },
+    { rank: 12, player: 'Roy Halladay', startYear: 2009, endYear: 2011, avgFIP: 2.76, ip: 722.4 },
+    { rank: 13, player: 'Cliff Lee', startYear: 2009, endYear: 2011, avgFIP: 2.76, ip: 675.5 },
+    { rank: 14, player: 'Noah Syndergaard', startYear: 2015, endYear: 2018, avgFIP: 2.78, ip: 487.3 },
+    { rank: 15, player: 'Kevin Gausman', startYear: 2021, endYear: 2023, avgFIP: 2.78, ip: 551.2 },
+    { rank: 16, player: 'Ben Sheets', startYear: 2004, endYear: 2006, avgFIP: 2.80, ip: 499.2 },
+    { rank: 17, player: 'Adam Wainwright', startYear: 2010, endYear: 2013, avgFIP: 2.84, ip: 669.5 },
+    { rank: 18, player: 'Matt Harvey', startYear: 2013, endYear: 2016, avgFIP: 2.84, ip: 459.4 },
+    { rank: 19, player: 'Justin Verlander', startYear: 2018, endYear: 2022, avgFIP: 2.85, ip: 612.0 },
+    { rank: 20, player: 'Corey Kluber', startYear: 2014, endYear: 2016, avgFIP: 2.86, ip: 672.2 },
+    { rank: 21, player: 'Corbin Burnes', startYear: 2021, endYear: 2023, avgFIP: 2.86, ip: 562.2 },
+    { rank: 22, player: 'David Price', startYear: 2013, endYear: 2015, avgFIP: 2.86, ip: 654.4 },
+    { rank: 23, player: 'Anibal Sanchez', startYear: 2012, endYear: 2014, avgFIP: 2.88, ip: 503.2 },
+    { rank: 24, player: 'Zack Wheeler', startYear: 2021, endYear: 2023, avgFIP: 2.88, ip: 558.1 },
+    { rank: 25, player: 'Zack Greinke', startYear: 2009, endYear: 2011, avgFIP: 2.88, ip: 620.3 }
+  ],
+  '5': [
+    { rank: 1, player: 'Clayton Kershaw', startYear: 2012, endYear: 2016, avgFIP: 2.18, ip: 1042.5 },
+    { rank: 2, player: 'Jacob deGrom', startYear: 2017, endYear: 2021, avgFIP: 2.33, ip: 782.1 },
+    { rank: 3, player: 'Pedro Martinez', startYear: 2000, endYear: 2004, avgFIP: 2.36, ip: 935.5 },
+    { rank: 4, player: 'Chris Sale', startYear: 2014, endYear: 2018, avgFIP: 2.64, ip: 980.5 },
+    { rank: 5, player: 'Randy Johnson', startYear: 2000, endYear: 2004, avgFIP: 2.64, ip: 1116.6 },
+    { rank: 6, player: 'John Smoltz', startYear: 2002, endYear: 2006, avgFIP: 2.67, ip: 686.6 },
+    { rank: 7, player: 'Stephen Strasburg', startYear: 2010, endYear: 2015, avgFIP: 2.77, ip: 752.2 },
+    { rank: 8, player: 'Max Scherzer', startYear: 2015, endYear: 2019, avgFIP: 2.80, ip: 1048.8 },
+    { rank: 9, player: 'Cliff Lee', startYear: 2010, endYear: 2014, avgFIP: 2.82, ip: 958.6 },
+    { rank: 10, player: 'Corbin Burnes', startYear: 2020, endYear: 2024, avgFIP: 2.83, ip: 815.5 },
+    { rank: 11, player: 'Felix Hernandez', startYear: 2010, endYear: 2014, avgFIP: 2.84, ip: 1154.5 },
+    { rank: 12, player: 'Corey Kluber', startYear: 2014, endYear: 2018, avgFIP: 2.84, ip: 1090.4 },
+    { rank: 13, player: 'Adam Wainwright', startYear: 2009, endYear: 2014, avgFIP: 2.90, ip: 1129.5 },
+    { rank: 14, player: 'Shane Bieber', startYear: 2018, endYear: 2022, avgFIP: 2.90, ip: 701.6 },
+    { rank: 15, player: 'Johan Santana', startYear: 2002, endYear: 2006, avgFIP: 2.93, ip: 958.6 },
+    { rank: 16, player: 'Roy Halladay', startYear: 2007, endYear: 2011, avgFIP: 2.97, ip: 1193.5 },
+    { rank: 17, player: 'Josh Johnson', startYear: 2008, endYear: 2012, avgFIP: 2.98, ip: 730.5 },
+    { rank: 18, player: 'Curt Schilling', startYear: 2001, endYear: 2005, avgFIP: 2.98, ip: 1002.6 },
+    { rank: 19, player: 'Tim Lincecum', startYear: 2007, endYear: 2011, avgFIP: 2.98, ip: 1027.3 },
+    { rank: 20, player: 'David Price', startYear: 2011, endYear: 2015, avgFIP: 2.99, ip: 1089.5 },
+    { rank: 21, player: 'Justin Verlander', startYear: 2009, endYear: 2013, avgFIP: 3.00, ip: 1171.3 },
+    { rank: 22, player: 'Zack Wheeler', startYear: 2020, endYear: 2024, avgFIP: 3.00, ip: 829.1 },
+    { rank: 23, player: 'Zack Greinke', startYear: 2009, endYear: 2013, avgFIP: 3.00, ip: 1009.6 },
+    { rank: 24, player: 'Carlos Carrasco', startYear: 2014, endYear: 2018, avgFIP: 3.01, ip: 855.3 },
+    { rank: 25, player: 'Madison Bumgarner', startYear: 2011, endYear: 2015, avgFIP: 3.03, ip: 1048.6 }
+  ]
+};    
+  // Function to check if player is recent (2024)
+function isRecentSeason(player) {
+  return player.endYear === 2024;
+}
+
+// Function to populate table
+function populateTable(years, type) {
+  const tableId = type === 'batting' ? '#batting-war-table' : '#pitching-war-table';
+  const data = type === 'batting' ? battingData[years] : pitchingData[years];
+  
+  const tableBody = document.querySelector(`${tableId} tbody`);
+  tableBody.innerHTML = '';
+  
+  // Iterate through all the data and create rows
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    
+    // Create each cell in the row
+    const rankCell = document.createElement('td');
+    rankCell.className = 'rank-cell';
+    rankCell.textContent = row.rank;
+    tr.appendChild(rankCell);
+    
+    const playerCell = document.createElement('td');
+    playerCell.className = 'player-cell';
+    playerCell.textContent = row.player;
+    tr.appendChild(playerCell);
+    
+    const yearsCell = document.createElement('td');
+    yearsCell.className = 'years-cell';
+    yearsCell.textContent = row.startYear === row.endYear ? 
+      row.startYear : `${row.startYear}-${row.endYear}`;
+    tr.appendChild(yearsCell);
+    
+    const statCell = document.createElement('td');
+    statCell.className = 'war-cell';
+    
+    // Use the appropriate stat based on the table type
+    if (type === 'batting') {
+      statCell.textContent = Number(row.avgWRCPlus).toFixed(1);
+    } else {
+      statCell.textContent = Number(row.avgFIP).toFixed(2);
+    }
+    tableBody.appendChild(tr);
+  });
+}
+
+// Initialize with 1-year data for both tables
+populateTable('1', 'batting');
+populateTable('1', 'pitching');
+
+// Add tab click handlers
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const type = this.getAttribute('data-type');
+    const years = this.getAttribute('data-years');
+    const tabSelector = type === 'batting' ? '.batting-tabs .tab' : '.pitching-tabs .tab';
+    
+    // Remove active class from all tabs of this type
+    document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
+    
+    // Add active class to clicked tab
+    this.classList.add('active');
+    
+    // Populate table with appropriate data
+    populateTable(years, type);
+  });
+});
+  </script>
+</body>
+</html>
