@@ -488,6 +488,8 @@ function populateTable(years, type) {
     } else {
       statCell.textContent = Number(row.avgFIP).toFixed(2);
     }
+    tr.appendChild(statCell);
+
     tableBody.appendChild(tr);
   });
 }
